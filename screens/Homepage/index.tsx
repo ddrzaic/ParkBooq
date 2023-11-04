@@ -15,6 +15,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { BottomNavigationEnum } from "../../helpers/const";
 
 Mapbox.setAccessToken(
   "sk.eyJ1IjoiZGRyemFpYyIsImEiOiJjbG9qdnk0YWcyNXdwMmtvMjFzNWoyYWZpIn0.kWjM-b9vjLseJM3nz-_qIg"
@@ -65,7 +66,7 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
           />
         </View>
       </StickyHeader>
-      <BottomNavigation />
+      <BottomNavigation active={BottomNavigationEnum.MAP} onChange={() => {}} />
       <Mapbox.MapView
         style={styles.map}
         styleURL={Mapbox.StyleURL.Street}

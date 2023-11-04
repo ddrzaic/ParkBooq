@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useRef } from "react";
 import * as S from "./BottomNavigation.styled";
 import { MapIcon, StarIcon } from "../Icons";
 import { ProfileIcon } from "../Icons/ProfileIcon";
 import { theme } from "../../config/theme.config";
+import { BottomNavigationEnum } from "../../helpers/const";
 
-type BottomNavigationProps = {};
+import { Modalize } from "react-native-modalize";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+
+type BottomNavigationProps = {
+  active: BottomNavigationEnum;
+  onChange: (value: BottomNavigationEnum) => void;
+  drawerContent: React.ReactNode;
+};
 
 type ButtonProps = {
   isActive: boolean;
@@ -28,21 +36,35 @@ const getIconColor = (isActive: boolean) => {
   return theme.palette.white;
 };
 
-enum BottomNavigationEnum {
-  MAP,
-  FAVORITES,
-  PROFILE,
-}
+export const BottomNavigation = ({
+  active,
+  onChange,
+  drawerContent,
+}: BottomNavigationProps) => {
+  const modalizeRef = useRef<Modalize>(null);
 
-export const BottomNavigation = () => {
-  const [active, setActive] = React.useState(BottomNavigationEnum.MAP);
+  const onOpen = () => {
+    modalizeRef.current?.open();
+  };
 
   return (
     <S.Container>
+      <S.DrawerHandleBackground onPressIn={onOpen}>
+        <S.DrawerHandle />
+      </S.DrawerHandleBackground>
+
+      <Modalize
+        ref={modalizeRef}
+        adjustToContentHeight
+        childrenStyle={{ height: hp("80%") }}
+      >
+        {drawerContent}
+      </Modalize>
+
       <Button
         isActive={active === BottomNavigationEnum.MAP}
         onPress={() => {
-          setActive(BottomNavigationEnum.MAP);
+          onChange(BottomNavigationEnum.MAP);
         }}
       >
         <MapIcon color={getIconColor(active === BottomNavigationEnum.MAP)} />
@@ -52,7 +74,7 @@ export const BottomNavigation = () => {
       <Button
         isActive={active === BottomNavigationEnum.FAVORITES}
         onPress={() => {
-          setActive(BottomNavigationEnum.FAVORITES);
+          onChange(BottomNavigationEnum.FAVORITES);
         }}
       >
         <StarIcon
@@ -66,7 +88,7 @@ export const BottomNavigation = () => {
       <Button
         isActive={active === BottomNavigationEnum.PROFILE}
         onPress={() => {
-          setActive(BottomNavigationEnum.PROFILE);
+          onChange(BottomNavigationEnum.PROFILE);
         }}
       >
         <ProfileIcon

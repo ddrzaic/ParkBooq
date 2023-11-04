@@ -46,3 +46,29 @@ export const Text = styled.Text`
   font-size: ${wp("3%")}px;
   font-family: ${theme.fonts.interBold};
 `;
+
+export const DrawerHandleBackground = styled(TouchableOpacity)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -${hp("3.5%")}px;
+  height: ${hp("12%")}px;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  background-color: rgba(56, 113, 224, 0.7);
+  padding: ${hp("0.4%")}px ${wp("1.5%")}px;
+  border-radius: ${hp("5%")}px;
+`;
+
+export const DrawerHandle = styled(View)`
+  width: ${wp("20%")}px;
+  height: ${hp("0.5%")}px;
+  background-color: ${theme.palette.white};
+  border-radius: ${hp("100%")}px;
+  top: ${hp("1%")}px;
+  padding: ${hp("0.5%")}px ${wp("1.5%")}px;
+  position: absolute;
+`;
