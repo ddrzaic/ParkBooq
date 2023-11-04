@@ -1,21 +1,22 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/Homepage";
-
-const Drawer = createDrawerNavigator();
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const screenOptionStyle = {
-    drawerType: 'front',
+  headerShown: false,
 };
 
 const Navigation = () => {
-    return (
-        <NavigationContainer>
-            <Drawer.Navigator initialRouteName={'Home'} screenOptions={screenOptionStyle as {}}>
-                <Drawer.Screen name="Home" component={HomeScreen}/>
-            </Drawer.Navigator>
-        </NavigationContainer>
-    );
+  const Stack = createNativeStackNavigator();
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={screenOptionStyle}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default Navigation;
