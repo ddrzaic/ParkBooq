@@ -5,22 +5,33 @@ import {
 } from "react-native-responsive-screen";
 import { theme } from "../../config/theme.config";
 import { TouchableOpacity, View } from "react-native";
-import { Modalize } from "react-native-modalize";
 
 export const Container = styled(View)`
-  height: ${hp("40%")}px;
+  padding: ${hp("1%")}px ${wp("1%")}px;
+`;
+
+export const DrawerHandleBackground = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background-color: rgba(56, 113, 224, 0.7);
-  padding: ${hp("0%")}px ${wp("1.5%")}px;
   position: absolute;
-  bottom: 0;
+  top: -${hp("3%")}px;
+  height: ${hp("10%")}px;
   left: 0;
   right: 0;
-  z-index: 1000;
-  margin: ${hp("13%")}px ${wp("8%")}px;
-  border-radius: ${hp("3%")}px;
-  z-index: 1000;
+  background-color: transparent;
+  padding: ${hp("2%")}px ${wp("2%")}px;
+  border-radius: ${hp("5%")}px;
+  z-index: -1;
+`;
+
+export const DrawerHandle = styled(View)`
+  width: ${wp("17%")}px;
+  height: ${hp("1%")}px;
+  background-color: ${theme.palette.primary};
+  border-radius: ${hp("100%")}px;
+  top: ${hp("1%")}px;
+  padding: ${hp("0.5%")}px ${wp("1.5%")}px;
+  position: absolute;
 `;

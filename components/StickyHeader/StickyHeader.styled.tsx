@@ -12,6 +12,6 @@ export const HeaderContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  width: 100%;
   z-index: 100;
+  flex: 1;
 `;

@@ -5,14 +5,13 @@ import { ProfileIcon } from "../Icons/ProfileIcon";
 import { theme } from "../../config/theme.config";
 import { BottomNavigationEnum } from "../../helpers/const";
 
-import { Modalize } from "react-native-modalize";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { InfoComponent } from "../InfoComponent/InfoComponent";
 
 type BottomNavigationProps = {
   active: BottomNavigationEnum;
   onChange: (value: BottomNavigationEnum) => void;
-  drawerContent: React.ReactNode;
-  displayDrawerHandle?: boolean;
+  drawerContent?: React.ReactNode;
 };
 
 type ButtonProps = {
@@ -41,89 +40,47 @@ export const BottomNavigation = ({
   active,
   onChange,
   drawerContent,
-  displayDrawerHandle = false,
-
 }: BottomNavigationProps) => {
-  const modalizeRef = useRef<Modalize>(null);
-
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-
-  const onOpen = () => {
-    modalizeRef.current?.open();
-    setIsDrawerOpen(true);
-  };
-
   return (
-    <S.Container>
-      {!isDrawerOpen && displayDrawerHandle && (
-      <S.DrawerHandleBackground onPressIn={onOpen}>
-        <S.DrawerHandle />
-      </S.DrawerHandleBackground>
-      )}
+    <>
+      <InfoComponent content={drawerContent} />
+      <S.Container>
+        <Button
+          isActive={active === BottomNavigationEnum.MAP}
+          onPress={() => {
+            onChange(BottomNavigationEnum.MAP);
+          }}
+        >
+          <MapIcon color={getIconColor(active === BottomNavigationEnum.MAP)} />
+          {active === BottomNavigationEnum.MAP && <S.Text>Map</S.Text>}
+        </Button>
 
-      <S.StyledModalize
+        <Button
+          isActive={active === BottomNavigationEnum.FAVORITES}
+          onPress={() => {
+            onChange(BottomNavigationEnum.FAVORITES);
+          }}
+        >
+          <StarIcon
+            color={getIconColor(active === BottomNavigationEnum.FAVORITES)}
+          />
+          {active === BottomNavigationEnum.FAVORITES && (
+            <S.Text>Favorites</S.Text>
+          )}
+        </Button>
 
-        onClose={() => {setIsDrawerOpen(false)}}
-        handlePosition="inside"
-        ref={modalizeRef}
-        disableScrollIfPossible={false}
-        scrollViewProps={{
-          showsVerticalScrollIndicator: true,
-          showsHorizontalScrollIndicator: true,
-        }}
-        adjustToContentHeight
-        overlayStyle={{ display: "none" }}
-        rootStyle={{ zIndex: -1000 }}
-        modalStyle={{
-          backgroundColor: theme.palette.primary,
-          marginBottom: hp("0%"),
-          opacity: 0.8,
-          zIndex: -1000,
-          borderRadius: hp("4%"),
-          borderTopLeftRadius: hp("4%"),
-          borderTopRightRadius: hp("4%"),
-        }}
-        childrenStyle={{ height: hp("40%") }}
-        handleStyle={{ backgroundColor: "white" }}
-      >
-        {drawerContent}
-      </S.StyledModalize>
-
-      <Button
-        isActive={active === BottomNavigationEnum.MAP}
-        onPress={() => {
-          onChange(BottomNavigationEnum.MAP);
-        }}
-      >
-        <MapIcon color={getIconColor(active === BottomNavigationEnum.MAP)} />
-        {active === BottomNavigationEnum.MAP && <S.Text>Map</S.Text>}
-      </Button>
-
-      <Button
-        isActive={active === BottomNavigationEnum.FAVORITES}
-        onPress={() => {
-          onChange(BottomNavigationEnum.FAVORITES);
-        }}
-      >
-        <StarIcon
-          color={getIconColor(active === BottomNavigationEnum.FAVORITES)}
-        />
-        {active === BottomNavigationEnum.FAVORITES && (
-          <S.Text>Favorites</S.Text>
-        )}
-      </Button>
-
-      <Button
-        isActive={active === BottomNavigationEnum.PROFILE}
-        onPress={() => {
-          onChange(BottomNavigationEnum.PROFILE);
-        }}
-      >
-        <ProfileIcon
-          color={getIconColor(active === BottomNavigationEnum.PROFILE)}
-        />
-        {active === BottomNavigationEnum.PROFILE && <S.Text>Profile</S.Text>}
-      </Button>
-    </S.Container>
+        <Button
+          isActive={active === BottomNavigationEnum.PROFILE}
+          onPress={() => {
+            onChange(BottomNavigationEnum.PROFILE);
+          }}
+        >
+          <ProfileIcon
+            color={getIconColor(active === BottomNavigationEnum.PROFILE)}
+          />
+          {active === BottomNavigationEnum.PROFILE && <S.Text>Profile</S.Text>}
+        </Button>
+      </S.Container>
+    </>
   );
 };

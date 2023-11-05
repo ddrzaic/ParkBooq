@@ -33,7 +33,7 @@ export const Wrapper = styled(TouchableOpacity)`
   padding: ${hp("1%")}px ${wp("5%")}px;
   border-radius: ${hp("10%")}px;
   background-color: ${theme.palette.primary};
-
+  z-index: 1000;
   height: ${wp("11%")}px;
   margin: 0 ${wp("1%")}px;
   ${(props) =>
@@ -77,5 +77,4 @@ export const DrawerHandle = styled(View)`
 
 export const StyledModalize = styled(Modalize)`
   border-radius: ${hp("5%")}px;
-  
 `;

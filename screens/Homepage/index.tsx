@@ -34,21 +34,13 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
   const navigation = useNavigation();
 
   const [location, setLocation] = React.useState({
-    latitude: 0,
-    longitude: 0,
+    latitude: 45.81,
+    longitude: 15.96,
   });
 
   const [clusters, setClusters] = React.useState([]);
 
   const [mapData, setMapData] = React.useState<{ zoom: number }>({ zoom: 0 });
-
-  useEffect(() => {
-    const get = async () => {
-      const data = await getAllClusters();
-      setClusters(data);
-    };
-    get();
-  }, []);
 
   Mapbox.requestAndroidLocationPermissions();
 
@@ -67,6 +59,9 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
         latitude: currentLocation.coords.latitude ?? 0,
         longitude: currentLocation.coords.longitude ?? 0,
       });
+
+      const data = await getAllClusters();
+      setClusters(data);
     })();
   }, []);
 
@@ -74,20 +69,15 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
     return clusters?.map((item: any, index) => {
       return (
         <Mapbox.PointAnnotation
-        onSelected={() => {navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS, {
-          id: item._id,
-        });} }
           key={index.toString()}
           id={index.toString()}
           coordinate={[item.longitude, item.latitude]}
         >
-
-            <Pinpoint
-              color={item.available ? "#53D160" : "#D15353"}
-              width="27.8"
-              height="32.2"
-            />
-
+          <Pinpoint
+            color={item.available ? "#53D160" : "#D15353"}
+            width="27.8"
+            height="32.2"
+          />
         </Mapbox.PointAnnotation>
       );
     });
@@ -154,15 +144,28 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
       <StickyHeader>
         <View style={{ ...styles.stickyHeaderContent, marginTop: hp("2%") }}>
           <Logo />
+          <Input
+            placeholder="Search..."
+            onChangeText={function (value: string): void {
+              console.log(value);
+            }}
+            borderRadius={wp("50%")}
+            leftChild={
+              <View style={{ paddingLeft: wp("3%") }}>
+                <SearchIcon />
+              </View>
+            }
+            width="100"
+          />
         </View>
       </StickyHeader>
-      <InfoComponent content={generateModalData()} />
+
       <BottomNavigation
-        drawerContent={generateModalData()}
         active={BottomNavigationEnum.MAP}
         onChange={(e) => {
           navigation.navigate(e);
         }}
+        drawerContent={generateModalData()}
       />
       <Mapbox.MapView
         style={styles.map}
@@ -180,8 +183,11 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
         }}
       >
         <Mapbox.Camera
-          zoomLevel={15}
-          centerCoordinate={[location?.longitude ?? 0, location?.latitude ?? 0]}
+          zoomLevel={11}
+          centerCoordinate={[
+            location?.longitude ?? 15.96,
+            location?.latitude ?? 45.81,
+          ]}
           animationMode="flyTo"
           animationDuration={2000}
           allowUpdates={true}
