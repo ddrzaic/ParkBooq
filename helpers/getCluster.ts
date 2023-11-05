@@ -9,7 +9,7 @@ export const getCluster = async (id: string, token: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
     console.error(error);

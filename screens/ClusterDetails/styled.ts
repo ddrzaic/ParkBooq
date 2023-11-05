@@ -46,6 +46,7 @@ export const SectionTitle = styled.Text`
   font-size: 20px;
   color: #3e463f;
   font-family: ${theme.fonts.interSemiBold};
+  margin-top: 20px;
 `;
 
 export const SelectorWrapper = styled.View`

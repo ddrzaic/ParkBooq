@@ -71,7 +71,11 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
   };
 
   const handleReserve = async () => {
-    console.log(time);
+    console.log("payload", {
+      _id: id,
+      h: Number(time[0]),
+      m: Number(time[1]),
+    });
 
     try {
       const token = await get("token");
@@ -169,7 +173,7 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
               id="marker"
               coordinate={[cluster?.longitude ?? 0, cluster?.latitude ?? 0]}
             >
-              <Pinpoint color={pinPointColor} />
+              <Pinpoint color={"blue"} />
             </Mapbox.PointAnnotation>
           </Mapbox.MapView>
 

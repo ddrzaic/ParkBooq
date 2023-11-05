@@ -44,7 +44,7 @@ export const CardsSlider = ({
       decelerationRate="fast"
       snapToAlignment="center"
       pagingEnabled
-      height={maxCardHeight + 50}
+      height={maxCardHeight + 200}
     />
   );
 };
