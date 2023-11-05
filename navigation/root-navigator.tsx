@@ -6,6 +6,7 @@ export type RootDrawerParamList = {
     Favorites: undefined
     CarConfig: undefined
     ClusterDetails: undefined
+    Login: undefined
 };
 
 export type RootDrawerScreenProps<Screen extends keyof RootDrawerParamList> = DrawerNavigationProp<

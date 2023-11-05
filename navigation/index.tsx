@@ -6,6 +6,7 @@ import CarConfig from "../screens/CarConfig";
 import FavoritesScreen from "../screens/Favorites";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ClusterDetailsScreen from "../screens/ClusterDetails";
+import LoginScreen from "../screens/Login";
 
 const screenOptionStyle = {
   headerShown: false,
@@ -17,12 +18,13 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Navigator screenOptions={screenOptionStyle} initialRouteName="Login">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="CarConfig" component={CarConfig} />
         <Stack.Screen name="ClusterDetails" component={ClusterDetailsScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

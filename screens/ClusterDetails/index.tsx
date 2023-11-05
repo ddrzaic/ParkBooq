@@ -28,29 +28,33 @@ import { Pinpoint } from "../../components";
 import { OccupancyPrediction } from "../../components/OccupancyPrediction/OccupancyPrediction";
 import { MainButton } from "../../components/MainButton/MainButton";
 import Mapbox from "@rnmapbox/maps";
+import { getCluster } from "../../helpers/getCluster";
+import { openMaps } from "../../helpers/openMaps";
 
 const ClusterDetailsScreen: FC<
   RootDrawerScreenProps<"ClusterDetails">
-> = () => {
+> = ({route}) => {
+
+  const { id } = route.params;
+  const [cluster, setCluster] = React.useState<any>({});
+
+  const [day, setDay] = React.useState<string>("Sunday");
+
+  useEffect(() => {
+    const get = async () => {
+      const data = await getCluster(id);
+      setCluster(data[0]);
+    };
+    get();
+  }, [id]);
+
+
   // add function to change screen to home screen
   const navigation = useNavigation();
 
   const hasAvailableSpaces = true;
 
-  const openMaps = (lat: string, lng: string) => {
-    const scheme = Platform.select({
-      ios: "maps://0,0?q=",
-      android: "geo:0,0?q=",
-    });
-    const latLng = `${lat},${lng}`;
-    const label = "Wespa parking";
-    const url: string = Platform.select({
-      ios: `${scheme}${label}@${latLng}`,
-      android: `${scheme}${latLng}(${label})`,
-    });
-
-    Linking.openURL(url);
-  };
+  
 
   return (
     <View style={styles.container}>
@@ -63,15 +67,15 @@ const ClusterDetailsScreen: FC<
       <S.Wrapper>
         <S.TopWrapper>
           <Pinpoint
-            color={hasAvailableSpaces ? "#D15353" : "#53D160"}
+            color={cluster.available ? "#53D160" : "#D15353"}
             width="48"
             height="52"
           />
           <S.TextWrapper>
-            <S.TopText>Wespa parking</S.TopText>
-            <S.BottomText>Ul. Vjekoslava Heinzla 60</S.BottomText>
+            <S.TopText>{cluster.name}</S.TopText>
+            <S.BottomText>{cluster?.address?.split(',')[0]}</S.BottomText>
             <S.BottomText>120m from your location</S.BottomText>
-            <S.BottomText showGreen>10 spaces left</S.BottomText>
+            <S.BottomText available={cluster.available} showColor>{cluster.numOfAvailableSpots} spots left</S.BottomText>
           </S.TextWrapper>
         </S.TopWrapper>
 
@@ -112,39 +116,39 @@ const ClusterDetailsScreen: FC<
         <S.MainButtonWrapper>
           <MainButton
             label="Directions"
-            handlePress={() => {openMaps("45.026199","14.573340")}}
+            handlePress={() => {openMaps(cluster.latitude, cluster.longitude, cluster.name)}}
             primary={false}
           />
           <MainButton label="Reserve" handlePress={() => {}} />
         </S.MainButtonWrapper>
         <S.SectionTitle>Occupancy prediction</S.SectionTitle>
         <S.SelectorWrapper>
-          <S.StyledButton onPress={() => {}}>
-            <S.ButtonText>Mon</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Monday")}} selected={day == "Monday"}>
+            <S.ButtonText selected={day == "Monday"}>Mon</S.ButtonText>
           </S.StyledButton>
 
-          <S.StyledButton onPress={() => {}}>
-            <S.ButtonText>Tue</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Tuesday")}} selected={day == "Tuesday"}>
+            <S.ButtonText selected={day == "Tuesday"}>Tue</S.ButtonText>
           </S.StyledButton>
 
-          <S.StyledButton onPress={() => {}} selected>
-            <S.ButtonText selected>Wed</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Wednesday")}} selected={day == "Wednesday"}>
+            <S.ButtonText selected={day == "Wednesday"}>Wed</S.ButtonText>
           </S.StyledButton>
 
-          <S.StyledButton onPress={() => {}}>
-            <S.ButtonText>Thu</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Thursday")}} selected={day == "Thursday"}>
+            <S.ButtonText selected={day == "Thursday"}>Thu</S.ButtonText>
           </S.StyledButton>
 
-          <S.StyledButton onPress={() => {}}>
-            <S.ButtonText>Fri</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Friday")}} selected={day == "Friday"}>
+            <S.ButtonText selected={day == "Friday"}>Fri</S.ButtonText>
           </S.StyledButton>
 
-          <S.StyledButton onPress={() => {}}>
-            <S.ButtonText>Sat</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Saturday")}} selected={day == "Saturday"}>
+            <S.ButtonText selected={day == "Saturday"}>Sat</S.ButtonText>
           </S.StyledButton>
 
-          <S.StyledButton onPress={() => {}}>
-            <S.ButtonText>Sun</S.ButtonText>
+          <S.StyledButton onPress={() => {setDay("Sunday")}} selected={day == "Sunday"}>
+            <S.ButtonText selected={day == "Sunday"}>Sun</S.ButtonText>
           </S.StyledButton>
         </S.SelectorWrapper>
         <OccupancyPrediction />

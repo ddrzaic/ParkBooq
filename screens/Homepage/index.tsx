@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { RootDrawerScreenProps } from "../../navigation/root-navigator";
 import Mapbox from "@rnmapbox/maps";
 import * as Location from "expo-location";
@@ -72,33 +72,39 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
 
   const generatePointAnnotations = () => {
     return clusters?.map((item: any, index) => {
-        return (
-          <Mapbox.PointAnnotation
-            key={index.toString()}
-            id={index.toString()}
-            coordinate={[item.longitude, item.latitude]}
-          >
+      return (
+        <Mapbox.PointAnnotation
+        onSelected={() => {navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS, {
+          id: item._id,
+        });} }
+          key={index.toString()}
+          id={index.toString()}
+          coordinate={[item.longitude, item.latitude]}
+        >
+
             <Pinpoint
               color={item.available ? "#53D160" : "#D15353"}
               width="27.8"
               height="32.2"
             />
-          </Mapbox.PointAnnotation>
-        );
-      });
+
+        </Mapbox.PointAnnotation>
+      );
+    });
   };
 
   const modalItem = (item: any, index: number) => (
     <ClusterSelector
       key={index}
       handlePress={() => {
-        navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS);
+        navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS, {
+          id: item._id,
+        });
       }}
       name={item.name}
       address={item.address.split(",")[0]}
       distance={item.distance}
       hasAvailableSpaces={item.available}
-      onPress={() => {}}
       light
     />
   );
@@ -148,18 +154,6 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
       <StickyHeader>
         <View style={{ ...styles.stickyHeaderContent, marginTop: hp("2%") }}>
           <Logo />
-          <Input
-            placeholder="Search..."
-            onChangeText={function (value: string): void {
-              console.log(value);
-            }}
-            borderRadius={wp("50%")}
-            leftChild={
-              <View style={{ paddingLeft: wp("3%") }}>
-                <SearchIcon />
-              </View>
-            }
-          />
         </View>
       </StickyHeader>
       <InfoComponent content={generateModalData()} />

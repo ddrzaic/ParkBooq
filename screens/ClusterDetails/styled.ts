@@ -12,14 +12,14 @@ export const Wrapper = styled.View`
 `;
 
 export const TopText = styled.Text`
-  font-size: 35px;
+  font-size: ${hp("3.5%")}px;
   color: #3e463f;
   font-family: ${theme.fonts.interSemiBold};
 `;
 
-export const BottomText = styled.Text<{ showGreen?: boolean }>`
+export const BottomText = styled.Text<{ available?: boolean, showColor?: boolean }>`
   font-size: 17px;
-  color: ${(props) => (props.showGreen ? "#53D160" : "#3E463F")};
+  color: ${(props) => (props.showColor ? (props.available ? "#53D160" : "#D15353") : "#3E463F")};
   font-family: ${theme.fonts.interMedium};
 `;
 
@@ -66,7 +66,7 @@ export const MainButtonWrapper = styled.View`
 
 
 export const StyledButton = styled.TouchableOpacity<{selected?: boolean}>`
-  background-color: ${(props) => (props.selected && theme.palette.primary)};
+  background-color: ${(props) => (props.selected ? theme.palette.primary: theme.palette.white)};
   display: flex;
   justify-content: center;
   align-items: center;
