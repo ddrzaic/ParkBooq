@@ -50,6 +50,8 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
     getData();
   }, [id]);
 
+    
+
   const handleAddToFavorites = async () => {
     const newFavorite = {
       id: id,
@@ -71,11 +73,7 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
   };
 
   const handleReserve = async () => {
-    console.log("payload", {
-      _id: id,
-      h: Number(time[0]),
-      m: Number(time[1]),
-    });
+    await save("reservation", JSON.stringify({name: cluster.name, address: cluster.address, time: time}));
 
     try {
       const token = await get("token");

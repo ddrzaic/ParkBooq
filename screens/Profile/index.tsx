@@ -56,7 +56,7 @@ const ProfileScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
         >
           <S.WalletWrapper>
             <S.WalletTextHead>Wallet</S.WalletTextHead>
-            <S.WalletTextSubhead>{user?.balance} €</S.WalletTextSubhead>
+            <S.WalletTextSubhead>{user?.balance.toFixed(0)} €</S.WalletTextSubhead>
           </S.WalletWrapper>
         </S.Wallet>
         <CardsSlider

@@ -18,7 +18,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { BottomNavigationEnum } from "../../helpers/const";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -29,6 +29,7 @@ Mapbox.setAccessToken(
 import * as S from "./styled";
 import { MainButton } from "../../components/MainButton/MainButton";
 import { getAllClusters } from "../../helpers/getAllClusters";
+import { useSecureStore } from "../../hooks/useStorage";
 
 const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
   const navigation = useNavigation();
@@ -115,10 +116,25 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
     />
   );
 
-  const isReserved = false;
+  const {get} = useSecureStore();
+
+
+  const [reservation, setReservation] = React.useState(undefined);
+
+  const isFocused = useIsFocused();
+
+  useEffect (() => {
+    const readsData = async () => {
+      const data = await get("reservation");
+      setReservation(JSON.parse(data));
+    }
+    readsData();
+  }
+  ,[isFocused]);
+
 
   const generateModalData = () => {
-    if (isReserved) {
+    if (reservation) {
       return (
         <S.ModalWrapper>
           <S.ReservationTitle>Reservation</S.ReservationTitle>
@@ -129,15 +145,15 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
               height="32.2"
             />
             <View>
-              <S.ReservationName>Wespa Parking</S.ReservationName>
+              <S.ReservationName>{reservation?.name}</S.ReservationName>
               <S.ReservationAddress>
-                Ul. Vesesljava Holjevca
+                {reservation?.address?.split(",")[0]}
               </S.ReservationAddress>
             </View>
           </S.HeadWrapper>
 
           <S.InfoText>
-            Parked since 12:45. Your reservation expires in 2 hours.
+            Your reservation expires at {reservation?.time && reservation?.time[0]}:{reservation?.time && reservation?.time[1]}
           </S.InfoText>
           <S.ButtonWrapper>
             <MainButton primary={false} label="Directions" onPress={() => {}} />
