@@ -26,6 +26,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import * as S from "./styled";
 import { MainButton } from "../../components/MainButton/MainButton";
+import { login } from "../../helpers/login";
+import { useSecureStore } from "../../hooks/useStorage";
+import axios from "axios";
+import { BottomNavigationEnum, api } from "../../helpers/const";
 
 const LoginScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({}) => {
   // add function to change screen to home screen
@@ -34,8 +38,37 @@ const LoginScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({}) => {
   const [username, setUsername] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
-  const handleLogin = () => {
-    
+  const {save, get} = useSecureStore();
+
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await get("token");
+      if (token) {
+        navigation.navigate(BottomNavigationEnum.MAP);
+      }
+    };
+    getToken();
+  }
+  , []);
+
+  const handleLogin = async () => {
+
+    try {
+      const url = `${api}/auth/login`;
+      const response = await axios.post(url, {
+        username,
+        password,
+      });
+  
+  
+      await save("token", response.data.token);
+      if (response.data.token) {
+        navigation.navigate(BottomNavigationEnum.MAP);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -56,7 +89,7 @@ const LoginScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({}) => {
           secureTextEntry={true}
         />
         <S.StyledView>
-          <MainButton label="Login" handlePress={handleLogin()} />
+          <MainButton label="Login" handlePress={()=>handleLogin()} />
         </S.StyledView>
       </S.Wrapper>
     </View>

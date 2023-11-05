@@ -6,4 +6,4 @@ export enum BottomNavigationEnum {
   CLUSTERDETAILS = 'ClusterDetails',
 }
 
-export const api = "https://5ecd-195-29-210-254.ngrok-free.app";
+export const api = "https://4ed7-195-29-210-254.ngrok-free.app";

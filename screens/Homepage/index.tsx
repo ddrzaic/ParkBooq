@@ -69,6 +69,11 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
     return clusters?.map((item: any, index) => {
       return (
         <Mapbox.PointAnnotation
+          onSelected={() => {
+            navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS, {
+              id: item._id,
+            });
+          }}
           key={index.toString()}
           id={index.toString()}
           coordinate={[item.longitude, item.latitude]}

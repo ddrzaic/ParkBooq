@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/Homepage";
 import ProfileScreen from "../screens/Profile";
@@ -7,14 +7,18 @@ import FavoritesScreen from "../screens/Favorites";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ClusterDetailsScreen from "../screens/ClusterDetails";
 import LoginScreen from "../screens/Login";
+import { useSecureStore } from "../hooks/useStorage";
 
 const screenOptionStyle = {
   headerShown: false,
   animation: "none",
 };
 
+
+
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
+
 
   return (
     <NavigationContainer>
