@@ -19,11 +19,35 @@ import { BottomNavigationEnum } from "../../helpers/const";
 import { useNavigation } from "@react-navigation/native";
 import * as S from "./styled";
 import { Text } from "react-native";
+import { MainButton } from "../../components/MainButton/MainButton";
+import {addCar} from "../../helpers/addCar";
+import { useSecureStore } from "../../hooks/useStorage";
 
 const CarConfigScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
   // add function to change screen to home screen
   const navigation = useNavigation();
 
+
+  const {save, get} = useSecureStore();
+
+  const [token, setToken] = useState<string>("");
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await get("token");
+      setToken(token);
+    };
+    getToken();
+  }
+  , []);
+
+  const handleAddCar = async () => {
+    const info = await addCar(make, model, city, number, text, color, type, token)
+    if (info) navigation.navigate(BottomNavigationEnum.PROFILE)
+  }
+
+  const [make, setMake] = useState<string>("");
+  const [model, setModel] = useState<string>("");
   const [city, setCity] = useState<string>("ZG");
   const [number, setNumber] = useState<string>("111");
   const [text, setText] = useState<string>("AA");
@@ -48,8 +72,8 @@ const CarConfigScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
       >
         <Cars type={type} color={color} />
         <LicensePlate city={city} number={number} text={text} />
-        <Input onChangeText={() => {}} label="Make" placeholder="Toyota" />
-        <Input onChangeText={() => {}} label="Model" placeholder="Camry" />
+        <Input onChangeText={(e) => {setMake(e)}} label="Make" placeholder="Toyota" value={make} />
+        <Input onChangeText={(e) => {setModel(e)}} label="Model" placeholder="Camry" value={model}/>
         <S.InputLabel>License</S.InputLabel>
         <S.RegistrationView>
           <Input
@@ -134,6 +158,10 @@ const CarConfigScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
           <ButtonSelector label="Coupe" onPress={() => {setType("coupe")}} />
           <ButtonSelector label="SUV" onPress={() => {setType("suv")}} />
         </S.SelectorWrapper>
+        <View style={{ height: hp("7%"), marginTop: hp("3%"), width:hp("30%")}}>
+        <MainButton label="Save" handlePress={() => {handleAddCar()}} />
+        </View>
+        <S.Random/>
       </S.Wrapper>
 
       {/* <BottomNavigation active={BottomNavigationEnum.PROFILE} onChange={(e) => {navigation.navigate(e)}} /> */}

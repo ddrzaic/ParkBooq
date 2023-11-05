@@ -45,3 +45,7 @@ margin-top: ${hp("1%")}px;
   align-items: center;
   width: 90%;
 `;
+
+export const Random = styled.View`
+  display: flex;
+  height: ${hp("10%")}px;`
