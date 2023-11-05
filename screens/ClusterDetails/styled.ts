@@ -9,6 +9,7 @@ import { ButtonSelector } from "../../components";
 export const Wrapper = styled.View`
   margin-top: ${hp("10%")}px;
   padding: ${wp("5%")}px;
+  flex: 1;
 `;
 
 export const TopText = styled.Text`
@@ -17,9 +18,13 @@ export const TopText = styled.Text`
   font-family: ${theme.fonts.interSemiBold};
 `;
 
-export const BottomText = styled.Text<{ available?: boolean, showColor?: boolean }>`
+export const BottomText = styled.Text<{
+  available?: boolean;
+  showColor?: boolean;
+}>`
   font-size: 17px;
-  color: ${(props) => (props.showColor ? (props.available ? "#53D160" : "#D15353") : "#3E463F")};
+  color: ${(props) =>
+    props.showColor ? (props.available ? "#53D160" : "#D15353") : "#3E463F"};
   font-family: ${theme.fonts.interMedium};
 `;
 
@@ -63,7 +68,6 @@ export const MainButtonWrapper = styled.View`
   margin-top: 20px;
 `;
 
-
 export const SecondMainButtonWrapper = styled.View`
   margin-top: ${hp("1%")}px;
   display: flex;
@@ -74,21 +78,20 @@ export const SecondMainButtonWrapper = styled.View`
   margin-bottom: 30px;
 `;
 
-
-
-export const StyledButton = styled.TouchableOpacity<{selected?: boolean}>`
-  background-color: ${(props) => (props.selected ? theme.palette.primary: theme.palette.white)};
+export const StyledButton = styled.TouchableOpacity<{ selected?: boolean }>`
+  background-color: ${(props) =>
+    props.selected ? theme.palette.primary : theme.palette.white};
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: ${wp("2%")}px;
-  flex:1;
+  flex: 1;
   height: ${wp("8%")}px;
   border: 2px solid ${theme.palette.primary};
 `;
 
-export const ButtonText = styled.Text<{selected?: boolean}>`
-  color: ${(props) => ( props.selected ? "#fff" : theme.palette.primary)};
+export const ButtonText = styled.Text<{ selected?: boolean }>`
+  color: ${(props) => (props.selected ? "#fff" : theme.palette.primary)};
   font-family: ${theme.fonts.interMedium};
   font-size: 15px;
 `;
