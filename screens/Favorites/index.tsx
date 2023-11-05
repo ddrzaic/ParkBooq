@@ -17,18 +17,31 @@ import {
 import { BottomNavigationEnum } from "../../helpers/const";
 import { useNavigation } from "@react-navigation/native";
 import * as S from "./styled";
+import { useSecureStore } from "../../hooks/useStorage";
 
 const FavoritesScreen: FC<RootDrawerScreenProps<"Favorites">> = () => {
 
   // add function to change screen to home screen
   const navigation = useNavigation();
 
+  const [favs, setFavs] = React.useState<any>([]);
 
   //mocked data
   // name: string;
   // address: string;
   // distance: string;
   // hasAvailableSpaces: boolean;
+
+  const {save, get} = useSecureStore();
+  useEffect(() => {
+    const getFavorites = async () => {
+      const favorites = await get("favorites");
+      setFavs(JSON.parse(favorites));
+      
+    };
+    getFavorites();
+  }
+  , []);
 
   const favorites = [
     {name: "P+R Messe", address: "Messeplatz 1, 1020 Wien", distance: "1,2 km", hasAvailableSpaces: true},
@@ -47,8 +60,8 @@ const FavoritesScreen: FC<RootDrawerScreenProps<"Favorites">> = () => {
       </StickyHeader>
 
       <S.Wrapper>
-        {favorites.map((favorite, index) => {
-          return <ClusterSelector handlePress={()=>{navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS)}} key={index} name={favorite.name} address={favorite.address} distance={favorite.distance} hasAvailableSpaces={favorite.hasAvailableSpaces} onPress={() => {}} />
+        {favs.map((favorite, index) => {
+          return <ClusterSelector handlePress={()=>{navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS)}} key={index} name={favorite?.name} address={favorite?.address?.split(',')[0]} distance={favorite?.distance} hasAvailableSpaces={favorite?.hasAvailableSpaces} onPress={() => {}} />
         })}
       </S.Wrapper>
 

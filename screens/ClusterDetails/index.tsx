@@ -30,6 +30,7 @@ import { MainButton } from "../../components/MainButton/MainButton";
 import Mapbox from "@rnmapbox/maps";
 import { getCluster } from "../../helpers/getCluster";
 import { openMaps } from "../../helpers/openMaps";
+import { useSecureStore } from "../../hooks/useStorage";
 
 const ClusterDetailsScreen: FC<
   RootDrawerScreenProps<"ClusterDetails">
@@ -40,6 +41,8 @@ const ClusterDetailsScreen: FC<
 
   const [day, setDay] = React.useState<string>("Sunday");
 
+  const {save, get} = useSecureStore();
+
   useEffect(() => {
     const get = async () => {
       const data = await getCluster(id);
@@ -47,6 +50,26 @@ const ClusterDetailsScreen: FC<
     };
     get();
   }, [id]);
+
+  const handleAddToFavorites = async () => {    
+    const newFavorite={
+      id: id,
+      name: cluster.name,
+      address: cluster.address,
+    }
+
+    const favorites = await get("favorites");
+
+    const oldFavorites = JSON.parse(favorites);
+
+    if (oldFavorites) {
+      const newFavorites =  [...oldFavorites,newFavorite];
+      await save("favorites", JSON.stringify(newFavorites));
+      return;
+    } else {
+      await save("favorites",JSON.stringify([newFavorite]));
+    }
+  }
 
 
   // add function to change screen to home screen
@@ -117,10 +140,12 @@ const ClusterDetailsScreen: FC<
           <MainButton
             label="Directions"
             handlePress={() => {openMaps(cluster.latitude, cluster.longitude, cluster.name)}}
-            primary={false}
           />
-          <MainButton label="Reserve" handlePress={() => {}} />
+          <MainButton label="Favorite" primary={false} handlePress={handleAddToFavorites}/>
         </S.MainButtonWrapper>
+        <S.SecondMainButtonWrapper>
+        <MainButton label="Reserve" handlePress={() => {}} />
+        </S.SecondMainButtonWrapper>
         <S.SectionTitle>Occupancy prediction</S.SectionTitle>
         <S.SelectorWrapper>
           <S.StyledButton onPress={() => {setDay("Monday")}} selected={day == "Monday"}>

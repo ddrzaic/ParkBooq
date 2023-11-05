@@ -61,8 +61,19 @@ export const MainButtonWrapper = styled.View`
   align-items: center;
   gap: 5px;
   margin-top: 20px;
+`;
+
+
+export const SecondMainButtonWrapper = styled.View`
+  margin-top: ${hp("1%")}px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
   margin-bottom: 30px;
 `;
+
 
 
 export const StyledButton = styled.TouchableOpacity<{selected?: boolean}>`
