@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 
 export const SliderWrapper = styled.FlatList<{ height: number }>`
+  margin-top: 20px;
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 100%;

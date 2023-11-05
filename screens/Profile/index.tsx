@@ -9,6 +9,7 @@ import {
   Cars,
   Button,
   CardsSlider,
+  LicensePlate,
 } from "../../components";
 import {
   widthPercentageToDP as wp,
@@ -61,7 +62,13 @@ const ProfileScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
         <CardsSlider
           cards={[
             ...(user?.cars?.map((car) => (
-              <Cars type={car.type} color={car.color} />
+              <View>
+                <Cars type={car.type} color={car.color} />
+                <S.TextWrapper>
+                <LicensePlate city={car.city} number={car.numbers} text={car.text} />
+                <S.StyledText>{car.make} {car.model}</S.StyledText>
+                </S.TextWrapper>
+              </View>
             )) ?? []),
             <Button
               label="+"

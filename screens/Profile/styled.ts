@@ -34,3 +34,17 @@ export const WalletTextSubhead = styled.Text`
     color: ${theme.palette.white};
     font-family: ${theme.fonts.interSemiBold};
 `;
+
+export const TextWrapper = styled.View`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+`;
+
+export const StyledText = styled.Text`
+    font-size: ${wp("5%")}px;
+    color: #3E463F;
+    font-family: ${theme.fonts.interSemiBold};
+`;
