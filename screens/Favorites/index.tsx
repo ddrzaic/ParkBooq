@@ -20,7 +20,6 @@ import * as S from "./styled";
 import { useSecureStore } from "../../hooks/useStorage";
 
 const FavoritesScreen: FC<RootDrawerScreenProps<"Favorites">> = () => {
-
   // add function to change screen to home screen
   const navigation = useNavigation();
 
@@ -32,24 +31,14 @@ const FavoritesScreen: FC<RootDrawerScreenProps<"Favorites">> = () => {
   // distance: string;
   // hasAvailableSpaces: boolean;
 
-  const {save, get} = useSecureStore();
+  const { save, get } = useSecureStore();
   useEffect(() => {
     const getFavorites = async () => {
       const favorites = await get("favorites");
       setFavs(JSON.parse(favorites));
-      
     };
     getFavorites();
-  }
-  , []);
-
-  const favorites = [
-    {name: "P+R Messe", address: "Messeplatz 1, 1020 Wien", distance: "1,2 km", hasAvailableSpaces: true},
-    {name: "Wespa Parking", address: "Messeplatz 1, 1020 Wien", distance: "1,2 km", hasAvailableSpaces: false},
-    {name: "P+R Messe", address: "Messeplatz 1, 1020 Wien", distance: "1,2 km", hasAvailableSpaces: true},
-    {name: "Wespa Parking", address: "Messeplatz 1, 1020 Wien", distance: "1,2 km", hasAvailableSpaces: false},
-  ]
-
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -60,12 +49,31 @@ const FavoritesScreen: FC<RootDrawerScreenProps<"Favorites">> = () => {
       </StickyHeader>
 
       <S.Wrapper>
-        {favs.map((favorite, index) => {
-          return <ClusterSelector handlePress={()=>{navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS)}} key={index} name={favorite?.name} address={favorite?.address?.split(',')[0]} distance={favorite?.distance} hasAvailableSpaces={favorite?.hasAvailableSpaces} onPress={() => {}} />
+        {favs?.map((favorite, index) => {
+          return (
+            <ClusterSelector
+              handlePress={() => {
+                navigation.navigate(BottomNavigationEnum.CLUSTERDETAILS, {
+                  id: favorite?.id,
+                });
+              }}
+              key={index}
+              name={favorite?.name}
+              address={favorite?.address?.split(",")[0]}
+              distance={favorite?.distance}
+              hasAvailableSpaces={favorite?.hasAvailableSpaces}
+              onPress={() => {}}
+            />
+          );
         })}
       </S.Wrapper>
 
-      <BottomNavigation active={BottomNavigationEnum.FAVORITES} onChange={(e) => {navigation.navigate(e)}} />
+      <BottomNavigation
+        active={BottomNavigationEnum.FAVORITES}
+        onChange={(e) => {
+          navigation.navigate(e);
+        }}
+      />
     </View>
   );
 };
