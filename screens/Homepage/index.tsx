@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { RootDrawerScreenProps } from "../../navigation/root-navigator";
 import Mapbox from "@rnmapbox/maps";
@@ -40,7 +40,7 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
 
   const [clusters, setClusters] = React.useState([]);
 
-  const [mapData, setMapData] = React.useState<{ zoom: number }>({ zoom: 0 });
+  const [zoom, setZoom] = React.useState<number>(0);
 
   Mapbox.requestAndroidLocationPermissions();
 
@@ -65,8 +65,19 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
     })();
   }, []);
 
-  const generatePointAnnotations = () => {
+  const generatePointAnnotations = useCallback(() => {
     return clusters?.map((item: any, index) => {
+      const shouldRender =
+        (zoom > 12 && index % 9 === 0) ||
+        (zoom > 13 && index % 7 === 0) ||
+        (zoom > 14 && index % 5 === 0) ||
+        (zoom > 15 && index % 3 === 0) ||
+        (zoom > 16 && index % 2 === 0) ||
+        zoom > 17 ||
+        (zoom < 12 && index % 14 === 0);
+
+      if (!shouldRender) return null;
+
       return (
         <Mapbox.PointAnnotation
           onSelected={() => {
@@ -86,7 +97,7 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
         </Mapbox.PointAnnotation>
       );
     });
-  };
+  }, [clusters, zoom]);
 
   const modalItem = (item: any, index: number) => (
     <ClusterSelector
@@ -149,19 +160,6 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
       <StickyHeader>
         <View style={{ ...styles.stickyHeaderContent, marginTop: hp("2%") }}>
           <Logo />
-          <Input
-            placeholder="Search..."
-            onChangeText={function (value: string): void {
-              console.log(value);
-            }}
-            borderRadius={wp("50%")}
-            leftChild={
-              <View style={{ paddingLeft: wp("3%") }}>
-                <SearchIcon />
-              </View>
-            }
-            width="100"
-          />
         </View>
       </StickyHeader>
 
@@ -184,7 +182,7 @@ const HomeScreen: FC<RootDrawerScreenProps<"Home">> = () => {
         pitchEnabled={true}
         interactive={true}
         onCameraChanged={(e) => {
-          setMapData(e);
+          setZoom(e.properties.zoom);
         }}
       >
         <Mapbox.Camera
