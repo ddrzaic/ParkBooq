@@ -1,28 +1,11 @@
-import React, { FC, useEffect } from "react";
-import {
-  ImageBackground,
-  Linking,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import React, { FC, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { RootDrawerScreenProps } from "../../navigation/root-navigator";
-import {
-  BottomNavigation,
-  Input,
-  Logo,
-  StickyHeader,
-  Cars,
-  Button,
-  ClusterSelector,
-  ButtonSelector,
-} from "../../components";
+import { Input, Logo, StickyHeader } from "../../components";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { BottomNavigationEnum } from "../../helpers/const";
-import { useNavigation } from "@react-navigation/native";
 import * as S from "./styled";
 import { Pinpoint } from "../../components";
 import { OccupancyPrediction } from "../../components/OccupancyPrediction/OccupancyPrediction";
@@ -32,23 +15,39 @@ import { getCluster } from "../../helpers/getCluster";
 import { openMaps } from "../../helpers/openMaps";
 import { useSecureStore } from "../../hooks/useStorage";
 import { ScrollView } from "react-native-gesture-handler";
+import { Modal } from "../../components/Modal/Modal";
+import axios from "axios";
+import { api } from "../../helpers/const";
 
 const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
   route,
 }) => {
   const { id } = route.params;
   const [cluster, setCluster] = React.useState<any>({});
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [time, setTime] = useState([0, 0]);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
 
   const [day, setDay] = React.useState<string>("Sunday");
 
   const { save, get } = useSecureStore();
 
   useEffect(() => {
-    const get = async () => {
-      const data = await getCluster(id);
+    const getData = async () => {
+      const token = await get("token");
+
+      const data = await getCluster(id, token);
+
       setCluster(data[0]);
     };
-    get();
+    getData();
   }, [id]);
 
   const handleAddToFavorites = async () => {
@@ -71,8 +70,58 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
     }
   };
 
+  const handleReserve = async () => {
+    console.log(time);
+
+    try {
+      const token = await get("token");
+      const response = await axios.post(
+        `${api}/parking-spots/reserve`,
+        {
+          _id: id,
+          h: Number(time[0]),
+          m: Number(time[1]),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+    hideDatePicker();
+  };
+
+  const hasAvailableSpaces = cluster?.numOfAvailableSpots > 0;
+  const pinPointColor = hasAvailableSpaces ? "#53D160" : "#D15353";
+
   return (
     <View style={styles.container}>
+      {isDatePickerVisible && (
+        <Modal>
+          <Input
+            onChangeText={(text) => {
+              setTime([text, time[1]]);
+            }}
+            placeholder="hours"
+          />
+          <Input
+            onChangeText={(text) => {
+              setTime([time[0], text]);
+            }}
+            placeholder="minutes"
+          />
+          <MainButton
+            label="Reserve"
+            handlePress={() => {
+              handleReserve();
+            }}
+          />
+        </Modal>
+      )}
       <ScrollView>
         <StickyHeader>
           <View style={{ ...styles.stickyHeaderContent, marginTop: hp("2%") }}>
@@ -82,17 +131,13 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
 
         <S.Wrapper>
           <S.TopWrapper>
-            <Pinpoint
-              color={cluster.available ? "#53D160" : "#D15353"}
-              width="48"
-              height="52"
-            />
+            <Pinpoint color={pinPointColor} width="48" height="52" />
             <S.TextWrapper>
-              <S.TopText>{cluster.name}</S.TopText>
+              <S.TopText>{cluster?.name}</S.TopText>
               <S.BottomText>{cluster?.address?.split(",")[0]}</S.BottomText>
               <S.BottomText>120m from your location</S.BottomText>
-              <S.BottomText available={cluster.available} showColor>
-                {cluster.numOfAvailableSpots} spots left
+              <S.BottomText available={cluster?.available} showColor>
+                {cluster?.numOfAvailableSpots} spots left
               </S.BottomText>
             </S.TextWrapper>
           </S.TopWrapper>
@@ -109,7 +154,10 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
           >
             <Mapbox.Camera
               zoomLevel={12}
-              centerCoordinate={[cluster.longitude ?? 0, cluster.latitude ?? 0]}
+              centerCoordinate={[
+                cluster?.longitude ?? 0,
+                cluster?.latitude ?? 0,
+              ]}
               animationMode="flyTo"
               animationDuration={2000}
               allowUpdates={true}
@@ -119,9 +167,9 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
 
             <Mapbox.PointAnnotation
               id="marker"
-              coordinate={[cluster.longitude ?? 0, cluster.latitude ?? 0]}
+              coordinate={[cluster?.longitude ?? 0, cluster?.latitude ?? 0]}
             >
-              <Pinpoint color="#D15353" />
+              <Pinpoint color={pinPointColor} />
             </Mapbox.PointAnnotation>
           </Mapbox.MapView>
 
@@ -129,7 +177,7 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
             <MainButton
               label="Directions"
               handlePress={() => {
-                openMaps(cluster.latitude, cluster.longitude, cluster.name);
+                openMaps(cluster?.latitude, cluster?.longitude, cluster?.name);
               }}
             />
             <MainButton
@@ -138,9 +186,16 @@ const ClusterDetailsScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({
               handlePress={handleAddToFavorites}
             />
           </S.MainButtonWrapper>
-          <S.SecondMainButtonWrapper>
-            <MainButton label="Reserve" handlePress={() => {}} />
-          </S.SecondMainButtonWrapper>
+          {hasAvailableSpaces && (
+            <S.SecondMainButtonWrapper>
+              <MainButton
+                label="Reserve"
+                handlePress={() => {
+                  showDatePicker();
+                }}
+              />
+            </S.SecondMainButtonWrapper>
+          )}
           <S.SectionTitle>Occupancy prediction</S.SectionTitle>
           <S.SelectorWrapper>
             <S.StyledButton

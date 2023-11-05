@@ -1,10 +1,15 @@
-import axios from 'axios';
-import {api} from './const';
+import axios from "axios";
+import { api } from "./const";
 
-export const getCluster = async (id: string) => {
+export const getCluster = async (id: string, token: string) => {
   try {
     const url = `${api}/parking-clusters/${id}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
