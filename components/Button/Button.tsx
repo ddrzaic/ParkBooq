@@ -25,11 +25,8 @@ export const Button = forwardRef(
       <S.Button
         onPress={handlePress}
         isDisabled={isDisabled}
-        className={className}
-        style={style}
         activeOpacity={isDisabled ? 1 : 0.6}
         onLayout={onLayout}
-        ref={ref}
       >
         <S.ButtonText isDisabled={isDisabled}>{label}</S.ButtonText>
       </S.Button>

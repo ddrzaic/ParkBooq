@@ -28,6 +28,7 @@ interface IComponents {
 }
 
 interface IPalette {
+  greyish: string;
   primary: string;
   secondary: string;
   ternary: string;
@@ -65,6 +66,7 @@ export interface IDefaultTheme {
 }
 
 const colors: IPalette = {
+  greyish: "#404040",
   primary: "#3871E0",
   secondary: "#F1F1F3",
   ternary: "#E2E7FC",

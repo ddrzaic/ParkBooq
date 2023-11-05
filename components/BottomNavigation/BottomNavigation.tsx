@@ -12,6 +12,7 @@ type BottomNavigationProps = {
   active: BottomNavigationEnum;
   onChange: (value: BottomNavigationEnum) => void;
   drawerContent: React.ReactNode;
+  displayDrawerHandle?: boolean;
 };
 
 type ButtonProps = {
@@ -40,26 +41,53 @@ export const BottomNavigation = ({
   active,
   onChange,
   drawerContent,
+  displayDrawerHandle = false,
+
 }: BottomNavigationProps) => {
   const modalizeRef = useRef<Modalize>(null);
 
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
   const onOpen = () => {
     modalizeRef.current?.open();
+    setIsDrawerOpen(true);
   };
 
   return (
     <S.Container>
+      {!isDrawerOpen && displayDrawerHandle && (
       <S.DrawerHandleBackground onPressIn={onOpen}>
         <S.DrawerHandle />
       </S.DrawerHandleBackground>
+      )}
 
-      <Modalize
+      <S.StyledModalize
+
+        onClose={() => {setIsDrawerOpen(false)}}
+        handlePosition="inside"
         ref={modalizeRef}
+        disableScrollIfPossible={false}
+        scrollViewProps={{
+          showsVerticalScrollIndicator: true,
+          showsHorizontalScrollIndicator: true,
+        }}
         adjustToContentHeight
-        childrenStyle={{ height: hp("80%") }}
+        overlayStyle={{ display: "none" }}
+        rootStyle={{ zIndex: -1000 }}
+        modalStyle={{
+          backgroundColor: theme.palette.primary,
+          marginBottom: hp("0%"),
+          opacity: 0.8,
+          zIndex: -1000,
+          borderRadius: hp("4%"),
+          borderTopLeftRadius: hp("4%"),
+          borderTopRightRadius: hp("4%"),
+        }}
+        childrenStyle={{ height: hp("40%") }}
+        handleStyle={{ backgroundColor: "white" }}
       >
         {drawerContent}
-      </Modalize>
+      </S.StyledModalize>
 
       <Button
         isActive={active === BottomNavigationEnum.MAP}

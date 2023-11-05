@@ -7,7 +7,10 @@ export interface InputProps extends TextInputProps {
   placeholder?: string;
   onChangeText: (value: string) => void;
   borderRadius?: number;
-  leftChild?: React.ReactNode;
+  width?: string;
+  usePx?: boolean;
+  maxLength?: number;
+  removeMargin?: boolean;
 }
 
 export const Input = ({
@@ -15,24 +18,25 @@ export const Input = ({
   placeholder,
   value,
   onChangeText,
-  borderRadius,
-  leftChild,
-  ...rest
+  width,
+  usePx,
+  maxLength,
+  removeMargin
 }: InputProps) => {
   const handleTextChange = (text: string) => {
     onChangeText(text);
   };
 
   return (
-    <S.InputWrapper>
+    <S.InputWrapper removeMargin={removeMargin}>
       {label && <S.InputLabel>{label}</S.InputLabel>}
-      <S.InputContainer borderRadius={borderRadius}>
-        {leftChild && leftChild}
+      <S.InputContainer width={width} usePx={usePx}>
         <S.InputField
+          maxLength={maxLength}
           placeholder={placeholder}
           value={value}
           onChangeText={handleTextChange}
-          {...rest}
+
         />
       </S.InputContainer>
     </S.InputWrapper>

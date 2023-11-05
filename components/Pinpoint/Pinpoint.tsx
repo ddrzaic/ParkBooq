@@ -4,12 +4,14 @@ import Svg, { Mask, Path } from "react-native-svg";
 
 type PinpointProps = {
   color: string;
+  width?: string;
+  height?: string;
 };
 
-export const Pinpoint = ({ color }: PinpointProps) => {
+export const Pinpoint = ({ color, width="17", height="23" }: PinpointProps) => {
   return (
     <S.PinpointContainer color={color}>
-      <Svg width="17" height="23" viewBox="0 0 17 23" fill="none" opacity={0.8}>
+      <Svg width={width} height={height} viewBox="0 0 17 23" fill="none" opacity={0.8}>
         <Mask id="path-1-inside-1_9_368" fill="white">
           <Path
             fill-rule="evenodd"

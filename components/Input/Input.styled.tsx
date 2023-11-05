@@ -5,30 +5,30 @@ import {
 } from "react-native-responsive-screen";
 import { theme } from "../../config/theme.config";
 
-export const InputWrapper = styled.View`
+export const InputWrapper = styled.View<{removeMargin?: boolean}>`
   display: flex;
   flex-direction: column;
-  flex: 1;
+  margin-top:${({removeMargin}) => removeMargin ? "0" :"20"}px;
 `;
 
 export const InputLabel = styled.Text`
-  font-size: ${hp("2%")}px;
-  color: ${theme.palette.black};
-  padding-bottom: ${hp("2%")}px;
-  font-weight: bold;
+  font-size: 15px;
+  color: #6F7A70;
+  padding-bottom: ${hp("1%")}px;
+  font-family: ${theme.fonts.interMedium};
+  padding-left: ${wp("5%")}px;
 `;
 
-export const InputContainer = styled.View(
-  ({ borderRadius }) => css`
+export const InputContainer = styled.View<{width?: string, usePx?: boolean}>`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    border-radius: ${borderRadius ?? hp("2%")}px;
+    border-radius: ${hp("2%")}px;
+    border: 1px solid #6F7A70;
     overflow: hidden;
     background-color: ${theme.palette.background};
-  `
-);
+    width:${({width}) => width ?? "90"}${({usePx}) => usePx ? "px" : "%"};  
+  `;
 
 export const InputError = styled.Text(
   ({}) => css`
@@ -38,23 +38,17 @@ export const InputError = styled.Text(
   `
 );
 
-export const CurrencySymbol = styled.Text(
-  ({}) => css`
-    font-size: ${hp("2%")}px;
-    color: ${theme.palette.black};
-    font-weight: bold;
-    margin: 0 ${wp("2%")}px;
-  `
-);
-
 export const InputField = styled.TextInput.attrs(({}) => ({
-  placeholderTextColor: theme.palette.black,
-  cursorColor: theme.palette.black,
+  placeholderTextColor: '#BBBBBB',
+  cursorColor: '#BBBBBB',
 }))(
   ({}) => css`
-    flex: 1;
-    padding: ${hp("1.5%")}px ${wp("3%")}px;
-    color: ${theme.palette.black};
-    font-size: ${hp("2%")}px;
+
+    padding: ${hp("1.5%")}px ${wp("7%")}px;
+    color: #6F7A70;
+    font-size: 17px;
+    width:100%;
+    font-family: ${theme.fonts.interMedium};
+
   `
 );
