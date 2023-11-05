@@ -39,6 +39,7 @@ export const TopWrapper = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 20px;
+  margin-bottom: 20px;
 `;
 
 export const SectionTitle = styled.Text`
@@ -59,7 +60,7 @@ export const SelectorWrapper = styled.View`
 `;
 
 export const MainButtonWrapper = styled.View`
-  margin-top: ${hp("1%")}px;
+  margin-top: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

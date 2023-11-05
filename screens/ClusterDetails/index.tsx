@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     zIndex: 2900,
     width: "100%",
     height: 200,
-    borderRadius: 20,
+    borderRadius: 80,
   },
   container: {
     flex: 1,

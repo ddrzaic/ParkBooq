@@ -5,31 +5,35 @@ import { View } from "react-native";
 
 export interface OccupancyPredictionProps {}
 
+const generateRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const occupancyPredictions = [
-  { percentage: 40 },
-  { percentage: 65 },
-  { percentage: 25 },
-  { percentage: 52 },
-  { percentage: 55 },
-  { percentage: 60 },
-  { percentage: 70 },
-  { percentage: 80 },
-  { percentage: 90 },
-  { percentage: 100 },
-  { percentage: 100 },
-  { percentage: 70, now: true },
-  { percentage: 80 },
-  { percentage: 90 },
-  { percentage: 100 },
-  { percentage: 60 },
-  { percentage: 70 },
-  { percentage: 80 },
-  { percentage: 80 },
-  { percentage: 90 },
-  { percentage: 100 },
-  { percentage: 100 },
-  { percentage: 70 },
-  { percentage: 80 },
+  { percentage:  generateRandomNumber(0, 100)},
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100), },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100),now: true },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
+  { percentage: generateRandomNumber(0, 100) },
 ];
 
 export const OccupancyPrediction = forwardRef(
