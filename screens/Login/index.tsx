@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
   Image,
-  Text
+  Text,
 } from "react-native";
 import { RootDrawerScreenProps } from "../../navigation/root-navigator";
 import {
@@ -25,23 +25,40 @@ import {
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import * as S from "./styled";
+import { MainButton } from "../../components/MainButton/MainButton";
 
-
-const LoginScreen: FC<
-  RootDrawerScreenProps<"ClusterDetails">
-> = ({}) => {
-
-
-
+const LoginScreen: FC<RootDrawerScreenProps<"ClusterDetails">> = ({}) => {
   // add function to change screen to home screen
   const navigation = useNavigation();
 
-  
+  const [username, setUsername] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+
+  const handleLogin = () => {
+    
+  };
 
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/logo.png")} />
-      <Input label="Username" placeholder="Ivan" value={username} onChangeText={(e) => setUsername(e)}/>
+      <S.Wrapper>
+        <Image source={require("../../assets/logo.png")} />
+        <Input
+          label="Username"
+          placeholder="Ivan"
+          value={username}
+          onChangeText={(e) => setUsername(e)}
+        />
+        <Input
+          label="Password"
+          placeholder="*********"
+          value={password}
+          onChangeText={(e) => setPassword(e)}
+          secureTextEntry={true}
+        />
+        <S.StyledView>
+          <MainButton label="Login" handlePress={handleLogin()} />
+        </S.StyledView>
+      </S.Wrapper>
     </View>
   );
 };

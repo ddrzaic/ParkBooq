@@ -13,6 +13,7 @@ export interface InputProps extends TextInputProps {
   maxLength?: number;
   removeMargin?: boolean;
   leftChild?: React.ReactNode;
+  secureTextEntry?: boolean;
 }
 
 export const Input = ({
@@ -25,6 +26,7 @@ export const Input = ({
   maxLength,
   removeMargin,
   leftChild,
+  secureTextEntry = false
 }: InputProps) => {
   const handleTextChange = (text: string) => {
     onChangeText(text);
@@ -36,6 +38,7 @@ export const Input = ({
       <S.InputContainer width={width} usePx={usePx}>
         {leftChild}
         <S.InputField
+          secureTextEntry={secureTextEntry}
           maxLength={maxLength}
           placeholder={placeholder}
           value={value}
