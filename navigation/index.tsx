@@ -14,15 +14,15 @@ const screenOptionStyle = {
   animation: "none",
 };
 
-
-
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
 
-
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={screenOptionStyle} initialRouteName="Login">
+      <Stack.Navigator
+        screenOptions={screenOptionStyle}
+        initialRouteName="Login"
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />

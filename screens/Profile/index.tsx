@@ -8,19 +8,37 @@ import {
   StickyHeader,
   Cars,
   Button,
+  CardsSlider,
 } from "../../components";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { BottomNavigationEnum } from "../../helpers/const";
-import { useNavigation } from "@react-navigation/native";
+import { BottomNavigationEnum, api } from "../../helpers/const";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import * as S from "./styled";
+import axios from "axios";
+import { useSecureStore } from "../../hooks/useStorage";
 
 const ProfileScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
-
   // add function to change screen to home screen
   const navigation = useNavigation();
+  const [user, setUser] = React.useState(null);
+  const { get } = useSecureStore();
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const token = await get("token");
+      const res = await axios.get(`${api}/auth/whoAmI`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUser(res.data);
+    };
+    getUser();
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
@@ -31,17 +49,44 @@ const ProfileScreen: FC<RootDrawerScreenProps<"Profile">> = () => {
       </StickyHeader>
 
       <S.Wrapper>
-        <S.Wallet source={require("../../assets/gradient.png")} imageStyle={{ borderRadius: 27}}>
+        <S.Wallet
+          source={require("../../assets/gradient.png")}
+          imageStyle={{ borderRadius: 27 }}
+        >
           <S.WalletWrapper>
-          <S.WalletTextHead>Wallet</S.WalletTextHead>
-          <S.WalletTextSubhead>3,0 €</S.WalletTextSubhead>
+            <S.WalletTextHead>Wallet</S.WalletTextHead>
+            <S.WalletTextSubhead>3,0 €</S.WalletTextSubhead>
           </S.WalletWrapper>
         </S.Wallet>
-        <Cars type="suv" color="red" />
-        <Button label="+" onPress={() => {navigation.navigate(BottomNavigationEnum.CARCONFIG)}} />
+        <CardsSlider
+          cards={[
+            ...(user?.cars?.map((car) => (
+              <Cars type={car.type} color={car.color} />
+            )) ?? []),
+            <Button
+              label="+"
+              onPress={() => {
+                navigation.navigate(BottomNavigationEnum.CARCONFIG);
+              }}
+              style={{
+                borderRadius: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                alignSelf: "center",
+                marginBottom: hp("10%"),
+                marginHorizontal: wp("15%"),
+              }}
+            />,
+          ]}
+        />
       </S.Wrapper>
 
-      <BottomNavigation active={BottomNavigationEnum.PROFILE} onChange={(e) => {navigation.navigate(e)}} />
+      <BottomNavigation
+        active={BottomNavigationEnum.PROFILE}
+        onChange={(e) => {
+          navigation.navigate(e);
+        }}
+      />
     </View>
   );
 };

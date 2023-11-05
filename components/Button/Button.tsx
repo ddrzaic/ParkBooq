@@ -27,6 +27,7 @@ export const Button = forwardRef(
         isDisabled={isDisabled}
         activeOpacity={isDisabled ? 1 : 0.6}
         onLayout={onLayout}
+        style={style}
       >
         <S.ButtonText isDisabled={isDisabled}>{label}</S.ButtonText>
       </S.Button>
